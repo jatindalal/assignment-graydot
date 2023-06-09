@@ -32,6 +32,8 @@ def update_task(task_id):
     due_date = datetime.strptime(request.json['due_date'], '%d-%m-%Y').date()
     status = request.json['status']
 
+    if task is None:
+        return "task not found", 404
     task.title = title
     task.description = description
     task.due_date = due_date
@@ -44,6 +46,8 @@ def update_task(task_id):
 @app.route('/tasks/<int:task_id>', methods=['DELETE'])
 def delete_task(task_id):
     task = Task.query.get(task_id)
+    if task is None:
+        return "No such task exists", 404
     db.session.delete(task)
     db.session.commit()
 
